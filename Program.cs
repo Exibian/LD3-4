@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 
 namespace Lab3
 {
@@ -68,11 +69,33 @@ namespace Lab3
     {
         static void Main()
         {
-            var student1 = new Student(Console.ReadLine(), Console.ReadLine());
+            string temp_name="", temp_surname="";
+            Console.WriteLine("Enter student name: ");
+            temp_name = Console.ReadLine();
+            Console.WriteLine("Enter student lastname: ");
+            temp_surname = Console.ReadLine();
+            bool name = temp_name.Any(c => char.IsDigit(c));
+            bool surname = temp_surname.Any(c => char.IsDigit(c));
+            if (name == false && surname == false) {
+                var student1 = new Student(temp_name, temp_surname);
             for (int i = 1; i < 5; i++)
             {
-                student1.Studentas.Add(i, (Console.ReadLine(), Console.ReadLine(), student1.generateRandom(), student1.Exam, 0, 0));
-            }
+                    Console.WriteLine("Enter student name: ");
+                    temp_name = Console.ReadLine();
+                    Console.WriteLine("Enter student lastname: ");
+                    temp_surname = Console.ReadLine();
+                    name = temp_name.Any(c => char.IsDigit(c));
+                    surname = temp_surname.Any(c => char.IsDigit(c));
+                    if (name == false && surname == false)
+                    {
+                        student1.Studentas.Add(i, (temp_name, temp_surname, student1.generateRandom(), student1.Exam, 0, 0));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Name and/or surname cannot contain numbers. ");
+                        System.Environment.Exit(1);
+                    }
+                }
             for (int i = 0; i < student1.Hw.Length; i++)
             {
                 float suma = 0;
@@ -90,6 +113,8 @@ namespace Lab3
                 Console.WriteLine("Final points (Avg.) " + String.Format("{0:0.00}", student1.Studentas[i].Item5));
                 Console.WriteLine("Final points (Med.) " + String.Format("{0:0.00}", student1.GetMedian(student1.Studentas[i].Item3)));
             }
+            }
+            else Console.WriteLine("Name and/or surname cannot contain numbers. ");
         }
     }
 }

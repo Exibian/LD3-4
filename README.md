@@ -1,0 +1,1 @@
+added ifs to check whether the name or surname has numbers in it
