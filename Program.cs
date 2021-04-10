@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using System.IO;
 
 namespace Lab3
 {
@@ -20,28 +21,7 @@ namespace Lab3
         public float Final_points_avg { get => final_points_avg; set => final_points_avg = value; }
         public float Final_points_med { get => final_points_med; set => final_points_med = value; }
         public Dictionary<int, (string, string, int[], int, float, float)> Studentas { get => studentas; set => studentas = value; }
-
-        public Student(string s_name, string s_surname)
-        {
-            Random random = new Random();
-            Exam = random.Next(1, 10);
-            for (int i = 0; i < 5; i++)
-            {
-                Hw.SetValue(random.Next(1, 10), i);
-        }
-            Studentas.Add(0, (s_name, s_surname, Hw, Exam, 0, 0));
-        }
-        public int[] generateRandom()
-        {
-            Random random = new Random();
-            Exam = random.Next(1, 10);
-            int[] rand = new int[5];
-            for (int i = 0; i < 5; i++)
-            {
-                rand.SetValue(random.Next(1, 10), i);
-            }
-            return rand;
-        }
+        public Student() { }
         public decimal GetMedian(int[] array)
         {
             int[] tempArray = array;
@@ -69,52 +49,43 @@ namespace Lab3
     {
         static void Main()
         {
-            string temp_name="", temp_surname="";
-            Console.WriteLine("Enter student name: ");
-            temp_name = Console.ReadLine();
-            Console.WriteLine("Enter student lastname: ");
-            temp_surname = Console.ReadLine();
-            bool name = temp_name.Any(c => char.IsDigit(c));
-            bool surname = temp_surname.Any(c => char.IsDigit(c));
-            if (name == false && surname == false) {
-                var student1 = new Student(temp_name, temp_surname);
-            for (int i = 1; i < 5; i++)
+            var student1 = new Student();
+            string path = @"C:\Users\sintx\source\repos\Lab3\students.txt";
+            if (File.Exists(path) == false) { System.Environment.Exit(1); }
+            using (StreamReader sr = new StreamReader(path))
             {
-                    Console.WriteLine("Enter student name: ");
-                    temp_name = Console.ReadLine();
-                    Console.WriteLine("Enter student lastname: ");
-                    temp_surname = Console.ReadLine();
-                    name = temp_name.Any(c => char.IsDigit(c));
-                    surname = temp_surname.Any(c => char.IsDigit(c));
-                    if (name == false && surname == false)
-                    {
-                        student1.Studentas.Add(i, (temp_name, temp_surname, student1.generateRandom(), student1.Exam, 0, 0));
-                    }
-                    else
-                    {
-                        Console.WriteLine("Name and/or surname cannot contain numbers. ");
-                        System.Environment.Exit(1);
-                    }
-                }
-            for (int i = 0; i < student1.Hw.Length; i++)
-            {
-                float suma = 0;
-                int index = 1;
-                Console.WriteLine("Name = {0}, Lastname = {1}", student1.Studentas[i].Item1, student1.Studentas[i].Item2);
-                foreach (var item1 in student1.Studentas[i].Item3)
+                int index = 0;
+                while (sr.Peek() >= 0)
                 {
-                    suma += item1;
-                    Console.WriteLine("HW" + index + " score is " + item1);
+                    int[] homework = new int[5];
+                    var variables = sr.ReadLine().Split(' ');
+                    for (int i = 2; i < 7; i++)
+                    {
+                        homework[i - 2] = int.Parse(variables[i]);
+                    }
+                    student1.Studentas.Add(index, (variables[0], variables[1], homework, int.Parse(variables[7]), 0, 0));
                     index++;
                 }
-                student1.Final_points_avg = suma / 5;
-                student1.Studentas[i] = (student1.Studentas[i].Item1, student1.Studentas[i].Item2, student1.Studentas[i].Item3, student1.Studentas[i].Item4, student1.Final_points_avg, student1.Final_points_med);
-                Console.WriteLine("Exam = {0}", student1.Studentas[i].Item4);
-                Console.WriteLine("Final points (Avg.) " + String.Format("{0:0.00}", student1.Studentas[i].Item5));
-                Console.WriteLine("Final points (Med.) " + String.Format("{0:0.00}", student1.GetMedian(student1.Studentas[i].Item3)));
+                
             }
+            var sortedDict = from entry in student1.Studentas orderby entry.Value.Item1 ascending select entry;
+            sortedDict.ToDictionary(pair => pair.Key, pair => pair.Value);
+            var naujas = sortedDict.ToDictionary(pair => pair.Key, pair => pair.Value);
+            Console.WriteLine("Surname  " + "Name         " + "Final points (Avg.)    " + "Final points (Med.)");
+            Console.WriteLine("----------------------------------------------------------------");
+            for (int i = 0; i < student1.Studentas.Count; i++)
+            {
+                float suma = 0;
+                Console.Write(naujas[i].Item1+ " "+ naujas[i].Item2+" ");
+                foreach (var item1 in naujas[i].Item3)
+                {
+                    suma += item1;
+                }
+                student1.Final_points_avg = suma / naujas[i].Item3.Length;
+                naujas[i] = (naujas[i].Item1, naujas[i].Item2, naujas[i].Item3, naujas[i].Item4, student1.Final_points_avg, student1.Final_points_med);
+                Console.Write("                      " + String.Format("{0:0.00}", naujas[i].Item5));
+                Console.WriteLine("                   " + String.Format("{0:0.00}", student1.GetMedian(naujas[i].Item3)));
             }
-            else Console.WriteLine("Name and/or surname cannot contain numbers. ");
         }
     }
 }
