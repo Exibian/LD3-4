@@ -108,8 +108,8 @@ namespace Lab3
 
             string path4_p = @"C:\Users\sintx\source\repos\Lab3\studentas4_PASSED.txt";
             string path4_f = @"C:\Users\sintx\source\repos\Lab3\studentas4_FAILED.txt";
-            List<string> studentPassed = new List<string>();
-            List<string> studentFailed = new List<string>();
+            Queue<string> studentPassed = new Queue<string>();
+            Queue<string> studentFailed = new Queue<string>();
             Console.WriteLine("Enter student count: ");
             int kiekis=Int32.Parse(Console.ReadLine());
             var student1 = new Student("Name0", "Surname0");
@@ -202,7 +202,7 @@ namespace Lab3
                         grades = grades + grade + ", ";
                     }
                     string temp = item.Value.Item1 + " " + item.Value.Item2 + " " +grades;
-                    studentPassed.Add(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
+                    studentPassed.Enqueue(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
                 }
                 else if (item.Value.Item5 < 5.0)
                 {
@@ -212,7 +212,7 @@ namespace Lab3
                         grades = grades + grade + ", ";
                     }
                     string temp = item.Value.Item1 + " " + item.Value.Item2 + " " + grades;
-                    studentFailed.Add(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
+                    studentFailed.Enqueue(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
                 }
             }
             dataSplit.Stop();
