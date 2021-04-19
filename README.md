@@ -1,3 +1,6 @@
+Usage instructions:
+Input number of students you wish the program to generate and it will do the rest. (It will provide speed rate analysis using List<>)
+
 Speed rate analysis:
 COUNT = 10000
 First file creation: 16 milliseconds
