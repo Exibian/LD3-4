@@ -51,40 +51,56 @@ namespace Lab3
         {
             var student1 = new Student();
             string path = @"C:\Users\sintx\source\repos\Lab3\students.txt";
-            if (File.Exists(path) == false) { System.Environment.Exit(1); }
-            using (StreamReader sr = new StreamReader(path))
+            try
             {
-                int index = 0;
-                while (sr.Peek() >= 0)
+                using (StreamReader sr = new StreamReader(path))
                 {
-                    int[] homework = new int[5];
-                    var variables = sr.ReadLine().Split(' ');
-                    for (int i = 2; i < 7; i++)
+                    int index = 0;
+                    while (sr.Peek() >= 0)
                     {
-                        homework[i - 2] = int.Parse(variables[i]);
+                        int[] homework = new int[5];
+                        var variables = sr.ReadLine().Split(' ');
+                        for (int i = 2; i < 7; i++)
+                        {
+                            homework[i - 2] = int.Parse(variables[i]);
+                        }
+                        student1.Studentas.Add(index, (variables[0], variables[1], homework, int.Parse(variables[7]), 0, 0));
+                        index++;
                     }
-                    student1.Studentas.Add(index, (variables[0], variables[1], homework, int.Parse(variables[7]), 0, 0));
-                    index++;
+
                 }
-                
             }
+            catch (System.IO.FileNotFoundException)
+            {
+                Console.WriteLine("File was not found.");
+                System.Environment.Exit(1);
+            }
+            
             var sortedDict = from entry in student1.Studentas orderby entry.Value.Item1 ascending select entry;
             sortedDict.ToDictionary(pair => pair.Key, pair => pair.Value);
             var naujas = sortedDict.ToDictionary(pair => pair.Key, pair => pair.Value);
             Console.WriteLine("Surname  " + "Name         " + "Final points (Avg.)    " + "Final points (Med.)");
             Console.WriteLine("----------------------------------------------------------------");
-            for (int i = 0; i < student1.Studentas.Count; i++)
+            try
             {
-                float suma = 0;
-                Console.Write(naujas[i].Item1+ " "+ naujas[i].Item2+" ");
-                foreach (var item1 in naujas[i].Item3)
+                for (int i = 0; i < student1.Studentas.Count; i++)
                 {
-                    suma += item1;
+                    float suma = 0;
+                    Console.Write(naujas[i].Item1 + " " + naujas[i].Item2 + " ");
+                    foreach (var item1 in naujas[i].Item3)
+                    {
+                        suma += item1;
+                    }
+                    student1.Final_points_avg = suma / naujas[i].Item3.Length;
+                    naujas[i] = (naujas[i].Item1, naujas[i].Item2, naujas[i].Item3, naujas[i].Item4, student1.Final_points_avg, student1.Final_points_med);
+                    Console.Write("                      " + String.Format("{0:0.00}", naujas[i].Item5));
+                    Console.WriteLine("                   " + String.Format("{0:0.00}", student1.GetMedian(naujas[i].Item3)));
                 }
-                student1.Final_points_avg = suma / naujas[i].Item3.Length;
-                naujas[i] = (naujas[i].Item1, naujas[i].Item2, naujas[i].Item3, naujas[i].Item4, student1.Final_points_avg, student1.Final_points_med);
-                Console.Write("                      " + String.Format("{0:0.00}", naujas[i].Item5));
-                Console.WriteLine("                   " + String.Format("{0:0.00}", student1.GetMedian(naujas[i].Item3)));
+            }
+            catch (System.Collections.Generic.KeyNotFoundException)
+            {
+                Console.WriteLine("Value with provided key not found in dictionary.");
+                System.Environment.Exit(1);
             }
         }
     }
