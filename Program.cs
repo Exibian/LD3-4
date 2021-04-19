@@ -90,8 +90,6 @@ namespace Lab3
     {
         static void Main()
         {
-            
-
             string path1 = @"C:\Users\sintx\source\repos\Lab3\studentas1.txt";
             string path2 = @"C:\Users\sintx\source\repos\Lab3\studentas2.txt";
             string path3 = @"C:\Users\sintx\source\repos\Lab3\studentas3.txt";
@@ -108,8 +106,8 @@ namespace Lab3
 
             string path4_p = @"C:\Users\sintx\source\repos\Lab3\studentas4_PASSED.txt";
             string path4_f = @"C:\Users\sintx\source\repos\Lab3\studentas4_FAILED.txt";
-            Queue<string> studentPassed = new Queue<string>();
-            Queue<string> studentFailed = new Queue<string>();
+            List<string> studentPassed = new List<string>();
+            List<string> studentFailed = new List<string>();
             Console.WriteLine("Enter student count: ");
             int kiekis=Int32.Parse(Console.ReadLine());
             var student1 = new Student("Name0", "Surname0");
@@ -117,27 +115,18 @@ namespace Lab3
             {
                 student1.Studentas.Add(i, (student1.generateRandomNames(kiekis)[0], student1.generateRandomNames(kiekis)[1], student1.generateRandom(), student1.Exam, 0, 0));
             }
-            foreach (var item in student1.Studentas)
-            {
-                //Console.WriteLine("Student: "+item.Value.Item1+" "+ item.Value.Item2);
-            }
             for (int i = 0; i < kiekis; i++)
             {
                 float suma = 0;
                 int index = 1;
-                //Console.WriteLine("Name = {0}, Lastname = {1}", student1.Studentas[i].Item1, student1.Studentas[i].Item2);
                 foreach (var item1 in student1.Studentas[i].Item3)
                 {
                     suma += item1;
-                    //Console.WriteLine("HW" + index + " score is " + item1);
                     index++;
                 }
                 student1.Final_points_avg = suma / 5;
                 student1.Final_points_med = student1.GetMedian(student1.Studentas[i].Item3);
                 student1.Studentas[i] = (student1.Studentas[i].Item1, student1.Studentas[i].Item2, student1.Studentas[i].Item3, student1.Studentas[i].Item4, student1.Final_points_avg, student1.Final_points_med);
-                //Console.WriteLine("Exam = {0}", student1.Studentas[i].Item4);
-                //Console.WriteLine("Final points (Avg.) " + String.Format("{0:0.00}", student1.Studentas[i].Item5));
-                //Console.WriteLine("Final points (Med.) " + String.Format("{0:0.00}", student1.GetMedian(student1.Studentas[i].Item3)));
             }
             Stopwatch firstFileCreation = Stopwatch.StartNew();
             if (kiekis == 10000) {
@@ -202,17 +191,8 @@ namespace Lab3
                         grades = grades + grade + ", ";
                     }
                     string temp = item.Value.Item1 + " " + item.Value.Item2 + " " +grades;
-                    studentPassed.Enqueue(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
-                }
-                else if (item.Value.Item5 < 5.0)
-                {
-                    string grades = "";
-                    foreach (var grade in item.Value.Item3)
-                    {
-                        grades = grades + grade + ", ";
-                    }
-                    string temp = item.Value.Item1 + " " + item.Value.Item2 + " " + grades;
-                    studentFailed.Enqueue(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
+                    studentPassed.Add(temp + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6);
+                    student1.Studentas.Remove(item.Key);
                 }
             }
             dataSplit.Stop();
@@ -231,9 +211,15 @@ namespace Lab3
                 using (var sw = new StreamWriter(path1_f))
                 {
                     sw.WriteLine("----------------------------------FAILED----------------------------------");
-                    foreach (var item in studentFailed)
+                    foreach (var item in student1.Studentas)
                     {
-                        sw.WriteLine(item);
+                        string grades = "";
+                        foreach (var grade in item.Value.Item3)
+                        {
+                            grades = grades + grade + ", ";
+                        }
+                        string temp = item.Value.Item1 + " " + item.Value.Item2 + " " + grades + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6;
+                        sw.WriteLine(temp);
                     }
                 }
                 dataOutput.Stop();
@@ -251,9 +237,15 @@ namespace Lab3
                 using (var sw = new StreamWriter(path2_f))
                 {
                     sw.WriteLine("----------------------------------FAILED----------------------------------");
-                    foreach (var item in studentFailed)
+                    foreach (var item in student1.Studentas)
                     {
-                        sw.WriteLine(item);
+                        string grades = "";
+                        foreach (var grade in item.Value.Item3)
+                        {
+                            grades = grades + grade + ", ";
+                        }
+                        string temp = item.Value.Item1 + " " + item.Value.Item2 + " " + grades + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6;
+                        sw.WriteLine(temp);
                     }
                 }
                 dataOutput.Stop();
@@ -271,9 +263,15 @@ namespace Lab3
                 using (var sw = new StreamWriter(path3_f))
                 {
                     sw.WriteLine("----------------------------------FAILED----------------------------------");
-                    foreach (var item in studentFailed)
+                    foreach (var item in student1.Studentas)
                     {
-                        sw.WriteLine(item);
+                        string grades = "";
+                        foreach (var grade in item.Value.Item3)
+                        {
+                            grades = grades + grade + ", ";
+                        }
+                        string temp = item.Value.Item1 + " " + item.Value.Item2 + " " + grades + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6;
+                        sw.WriteLine(temp);
                     }
                 }
                 dataOutput.Stop();
@@ -290,9 +288,15 @@ namespace Lab3
                 using (var sw = new StreamWriter(path4_f))
                 {
                     sw.WriteLine("----------------------------------FAILED----------------------------------");
-                    foreach (var item in studentFailed)
+                    foreach (var item in student1.Studentas)
                     {
-                        sw.WriteLine(item);
+                        string grades = "";
+                        foreach (var grade in item.Value.Item3)
+                        {
+                            grades = grades + grade + ", ";
+                        }
+                        string temp = item.Value.Item1 + " " + item.Value.Item2 + " " + grades + item.Value.Item4 + ", " + item.Value.Item5 + ", " + item.Value.Item6;
+                        sw.WriteLine(temp);
                     }
                 }
                 dataOutput.Stop();

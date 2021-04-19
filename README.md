@@ -1,4 +1,25 @@
 Speed rate analysis:
+-----List-----
+COUNT = 10000
+First file creation: 16 milliseconds
+Data sorting: 12 milliseconds
+Data splitting: 4 milliseconds
+Data output: 4 milliseconds
+COUNT = 100000
+First file creation: 111 milliseconds
+Data sorting: 69 milliseconds
+Data splitting: 51 milliseconds
+Data output: 51 milliseconds
+COUNT = 1000000
+First file creation: 848 milliseconds
+Data sorting: 770 milliseconds
+Data splitting: 558 milliseconds
+Data output: 558 milliseconds
+COUNT = 10000000
+First file creation: 8206 milliseconds
+Data sorting: 8280 milliseconds
+Data splitting: 6364 milliseconds
+Data output: 6364 milliseconds
 -----LinkedList-----
 COUNT = 10000
 First file creation: 16 milliseconds
