@@ -1,1 +1,1 @@
-check if file exists
+added try/catch blocks
