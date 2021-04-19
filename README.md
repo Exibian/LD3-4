@@ -1,3 +1,6 @@
+Usage instructions: 
+Input number of students you wish the program to generate and it will do the rest. (It will provide speed rate analysis using List<>, LinkedList<> and Queue<> using strategy 2)
+
 Speed rate analysis:
 -----List-----
 COUNT = 10000
